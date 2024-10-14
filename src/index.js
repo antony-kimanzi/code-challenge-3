@@ -1,4 +1,6 @@
 // Your code here
+
+
 const movieTitle = document.querySelector("#title");
 const movieRuntime = document.querySelector("#runtime");
 const movieShowtime = document.querySelector("#showtime");
@@ -45,10 +47,12 @@ function updateMovieDetails(film) {
     } else {
       alert("Sorry, there are no tickets available.");
     }
+
+      // POST new ticket to /tickets endpoint
+    postNewTicket(film.id, 1); // Posting 1 ticket (for each purchase)
   });
 
-  // POST new ticket to /tickets endpoint
-  postNewTicket(film.id, 1); // Posting 1 ticket (for each purchase)
+
 }
 
 // rendering the movie menu
@@ -135,4 +139,23 @@ function deleteFilm(film) {
   })
     .then((response) => response.json())
     .then((film) => console.log(film));
+}
+
+// Function to POST a new ticket to the /tickets endpoint
+function postNewTicket(film_id, number_of_tickets) {
+  fetch("http://localhost:3000/tickets", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      film_id: film_id,
+      number_of_tickets: number_of_tickets,
+    }),
+  })
+    .then((res) => res.json())
+    .then((ticket) => {
+      console.log("New ticket added:", ticket);
+      // Handle the response or display ticket info as needed
+    });
 }
